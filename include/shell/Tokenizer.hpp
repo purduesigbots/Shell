@@ -6,9 +6,9 @@
 #include <deque>
 #include <exception>
 
-#include "legs/shell/token.hpp"
+#include "shell/token.hpp"
 
-namespace legs {
+namespace shell {
 
 /*
  * The tokenizer takes the input text stream and breaks it up into smaller
@@ -41,5 +41,5 @@ protected:
     std::deque<Token>   heldTokens; /* List of tokens that aren't accepted yet*/
 };
 
-} // namespace legs
+} // namespace shell
 

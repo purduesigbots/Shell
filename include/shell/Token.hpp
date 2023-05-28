@@ -1,10 +1,9 @@
 #pragma once
 
 #include <string>
-#include <memory>
-#include <variant>
+#include <map>
 
-namespace legs {
+namespace shell {
 
 class Token
 {
@@ -37,6 +36,7 @@ private:
     Token(int _type);
     Token(int _type, std::string _strValue);
     Token(int _type, float _floatValue);
+    Token(int _type, float _floatValue, std::string _suffixValue);
     Token(int _type, char _charValue);
 
     int type;
@@ -45,4 +45,4 @@ private:
 /* Define an operator overload to print tokens with std::cout */
 std::ostream& operator<<(std::ostream& stream, const Token& token);
 
-} // namespace legs
+} // namespace shell

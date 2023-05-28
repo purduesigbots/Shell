@@ -6,7 +6,7 @@
 
 #include "tokenizer.hpp"
 
-namespace legs {
+namespace shell {
 
 
-} // namespace legs
+} // namespace shell

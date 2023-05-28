@@ -1,0 +1,18 @@
+This file contains the grammer for the shell, or any nerds interested. 
+
+================================================================================
+TOKENS: 
+
+The following tokens (terminals) are used by the program:
+
+<identifier>        - Starts with a letter or underscore
+                    - Contains any number of letters, numbers, and underscores
+
+<number-literal>    - Starts with a decimal number
+
+
+================================================================================
+EBNF GRAMMAR:
+
+<end-of-statement>      ::= ; | \n | EOF
+<command>   ::= <identifier> <param-list> <end-of-statement>
