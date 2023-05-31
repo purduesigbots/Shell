@@ -1,0 +1,21 @@
+These are the commands that are built into the shell by default:
+
+
+exit
+    - Exits the current shell, causing program execution to return to the user
+      program.
+
+
+wait <timeframe>
+    Tells the shell to delay a specified amount of time before continuing.
+
+    <timeframe> - The period of time to wait. The default units is milleseconds,
+                  but the following suffixes can be used:
+        us - microseconds
+        ms -  milliseconds
+        s - seconds
+        m - minutes
+
+echo <object>*
+    Prints whatever is passed to it to the standard out for the shell. This can
+    

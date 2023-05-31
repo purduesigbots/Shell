@@ -1,14 +1,30 @@
+/*******************************************************************************
+ * @file shell.hpp
+ * 
+ * The public API for the shell.
+ ******************************************************************************/
+
 #pragma once
 
-#include <stdio.h>
+#include <istream>
 #include <iostream>
+#include <string>
+#include <map>
 
-namespace legs::shell {
+#include "shell/command.hpp"
 
-typedef bool(*CommandCallback)();
+namespace shell {
 
-bool runProgram(std::istream& sourceStream = std::cin);
+class Shell
+{
+public:
+    bool runInteractive(std::istream& sourceStrea = std::cin);
 
-bool addCommand(std::string name, CommandCallback callback);
+    bool addCommand(std::string name, CommandCallback callback);
 
-} // namespace legs::shell
+private:
+    std::map<std::string, CommandCallback> builtinCommands;
+    std::map<std::string, CommandCallback> userCommands;
+};
+
+} // namespace shell

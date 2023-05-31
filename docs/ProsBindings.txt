@@ -1,0 +1,12 @@
+
+
+motor <port(s)> <subcommand>
+    <port(s)>   - A list of ports that this command will affect. This is either
+                  a single number, or a tuple of numbers. The numbers should not
+                  have a suffix
+
+    <subcommand> - The action to take on the motors
+        goto        - Move absolute
+        move        - Move relative
+
+    
