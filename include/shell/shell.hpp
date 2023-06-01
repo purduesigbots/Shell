@@ -21,7 +21,7 @@ public:
     bool runInteractive(std::istream& sourceStrea = std::cin);
 
     bool addCommand(std::string name, CommandCallback callback);
-
+    
 private:
     std::map<std::string, CommandCallback> builtinCommands;
     std::map<std::string, CommandCallback> userCommands;

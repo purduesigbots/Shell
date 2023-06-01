@@ -37,7 +37,6 @@ public:
 
     bool isEndOfFile() const; 
 
-    
     static Token keyword(std::string value);
     static Token idnetifier(std::string value);
     static Token delimiter(char value);

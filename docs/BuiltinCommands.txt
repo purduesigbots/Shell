@@ -19,3 +19,17 @@ wait <timeframe>
 echo <object>*
     Prints whatever is passed to it to the standard out for the shell. This can
     
+record start <filename>
+    Begins recording the following comamnds into the specified text file, allowing
+    them to be analyzed or replayed later
+
+record end
+    Stops recording input into a text file
+
+run <filename>
+    Runs the text file as a list of commands piped in by the user.
+
+list <filename>
+    Lists the text file into the terminal
+
+    This command is ignored by the record command

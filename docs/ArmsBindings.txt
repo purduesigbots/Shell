@@ -1,0 +1,65 @@
+These are the commands that will be for ARMS command
+
+goto <position> (optional args)
+    Moves the robot to an absolute position
+
+    Position:
+        number:             Moves the robot forward or backward by an amount
+        (num, num):         Moves the robot to a point on the field
+        (num, num, num):    Moves the robot a pose on the field using the boomerang controller
+
+    Optional Parameters
+        nopid, thru:        Move without PID
+        pid=(num,num,num)   Set the PID constants to use for this movement
+        pi=(num, num)       Set PI for this command
+        pd=(num, num)       Set PD for this command
+        id=(num, num)       Set ID for this comand
+        p=num               Set P for this movement
+        i=num               set I for this movement
+        d=num               set D for this movement
+
+        async               Do not wait for the robot to settle before continuing execution
+
+        relative, rel       Move relative to the robots current position, rather than globally
+
+        boomerang           move using the boomerang controller
+        ponitThenPose       move using the point-to-pose controller
+
+        reverse             Move with the robot in reverse
+
+        exitRadius          Sets the maximum radius to that counts the robot as settled
+        exitAngle           Sets the maximum angle that counts for angular settlement
+
+        maxSpeed            Sets the maximum speed for the robot
+
+move <position/pose> [Optional Parameters] 
+    The same thing as the goto command, except with the relative flag is set
+
+
+face <angle/point> [optional parameters]
+    Makes the robot face a specific angle, or face a specific point in space.
+
+    Angle       - The angle to face
+    Point       - The point on the field to face
+
+    Optional args:
+        relative            Face the angle/point relative to the current heading/position
+        async               Do not wait for the robot to settle before finishing execution
+        nopid, thru         Do not use PID for this movemnet. All PID args are ignored
+
+        maxSpeed            Sets the maximum speed for this movement
+
+        exitAngle           Sets the maximum angle that counts for angular settlement
+
+settle
+    Pauses the current thread until the robot finishes it's current movement
+
+pid linear (tuple)
+    Sets the global PID constants to use for linear movements
+
+pid angular (tuple)
+    Sets the global PID constants to use for angular movmenets
+
+setpose (pose)
+    Sets the robots current pose. This allows the user to reset the odometry with
+    different coordinate systems

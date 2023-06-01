@@ -1,0 +1,23 @@
+
+SpecialPidLinear = (2, 0.5, 0.1)
+NormalPidLinear = (1, 0.5, 0.1)
+
+GoalPosition = ( 60, 24 )
+
+# Set the default PID values for the chassi movement
+pid linear $NormalPidLinear
+pid angular $NormalPidAngular
+
+# Grab the first disc then shoot it, and the matchloads into the goal
+intake on
+goto ( 60, 24 ) 
+wait 250ms
+intake off
+
+face $GoalPosition
+
+flywheel shoot 3
+
+
+
+

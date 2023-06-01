@@ -1,3 +1,6 @@
+These are the following PROS bindings that will exist for the shell for the initial release.
+Most of the devices are missing from this set because the initial versions of the shell will
+not have conditional logic or variables
 
 
 motor <port(s)> <subcommand>
@@ -9,4 +12,5 @@ motor <port(s)> <subcommand>
         goto        - Move absolute
         move        - Move relative
 
-    
+llemu write <object>
+    Writes the specified 
