@@ -15,3 +15,9 @@ temp.log
 temp.errors
 *.ini
 .d/
+
+# Files generated during parser building
+**/*.y.cpp
+**/*.l.cpp
+**/*.y.hpp
+**/*.l.hpp

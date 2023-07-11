@@ -13,8 +13,8 @@ SRCDIR=$(ROOT)/src
 INCDIR=$(ROOT)/include
 
 WARNFLAGS+=
-EXTRA_CFLAGS=
-EXTRA_CXXFLAGS=
+EXTRA_CFLAGS= -I./tools/parser
+EXTRA_CXXFLAGS= -I./tools/parser
 
 # Set to 1 to enable hot/cold linking
 USE_PACKAGE:=1
@@ -39,7 +39,36 @@ EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/main,$(foreach cext,$(CEXTS),$(f
 # that are in the directory include/LIBNAME
 TEMPLATE_FILES=$(INCDIR)/$(LIBNAME)/*.h $(INCDIR)/$(LIBNAME)/*.hpp
 
-.DEFAULT_GOAL=quick
+.DEFAULT_GOAL=quick  
+
+# PROS on windows does not include bison or flex, so we need to provide our own in that case. 
+FLEX := ./tools/parser/win_flex.exe
+BISON := ./tools/parser/win_bison.exe
+
+FLEX_FLAGS := 
+BISON_FLAGS := 
+
+# Define the d
+PARSER_SRC_DIR=$(SRCDIR)/shell/parser
+PARSER_INC_DIR=$(INCDIR)/shell/parser
+
+CXXSRC:=$(PARSER_SRC_DIR)/parser.y.cpp
+CXXSRC+=$(PARSER_SRC_DIR)/scanner.l.cpp
+
+$(PARSER_SRC_DIR)/scanner.l.cpp: $(PARSER_SRC_DIR)/scanner.l $(PARSER_SRC_DIR)/parser.y.cpp
+	$(FLEX) -o $@  $(FLEX_FLAGS) $<
+
+$(PARSER_SRC_DIR)/parser.y.cpp: $(PARSER_SRC_DIR)/parser.y
+	$(BISON) -o $@ --header=$(PARSER_INC_DIR)/parser.y.hpp $(BISON_FLAGS) $<
+
+# Override PROS's clean rule so that we can remove the stale bison/flex files
+clean:
+	rm -f $(PARSER_SRC_DIR)/parser.y.cpp
+	rm -f $(PARSER_SRC_DIR)/scanner.l.cpp
+	rm -f $(PARSER_INC_DIR)/parser.y.hpp
+	rm -f $(PARSER_INC_DIR)/scanner.l.hpp
+
+	
 
 ################################################################################
 ################################################################################

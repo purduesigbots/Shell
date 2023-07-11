@@ -2,13 +2,26 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <map>
+#include <string>
 
-namespace legs::shell {
+namespace shell {
 
-typedef bool(*CommandCallback)();
+class Shell
+{
+public:
 
-bool runProgram(std::istream& sourceStream = std::cin);
+    Shell();
+    ~Shell();
 
-bool addCommand(std::string name, CommandCallback callback);
+    void run(std::istream& input = std::cin, std::ostream& output = std::cout, std::ostream& error = std::cerr);
 
-} // namespace legs::shell
+    void setPrompt(std::string prompt);
+
+private:
+    std::string                     _prompt;
+    std::map<std::string, void*>    _commands;
+
+};
+
+} // namespace shell
