@@ -1,123 +1,66 @@
 
 %require "3.2"
 
-// We want to generate a C++ parser rather than a C parser.
-%language "C++"
 
-// Tell Bison to use a C++ variant for the value type. This allows us to use any
-// C++ type as the value type. Without this, we would be limited to using only
-// plain old data types.
+%language "c++"
+
+// Tell Bison that we want to use a variant type for semantic values rather than a union. 
+// This lets us use C++ objects in the semantic values without having to worry about making
+// them plain old data (POD) types.
 %define api.value.type variant
 
-// Tell Bison to use token constructors. This forces type safty with our tokens,
-// so that 
+// Tell Bison to use type safe interfaces instead of yylex
 %define api.token.constructor
 
+%define api.namespace { shell }
 %define api.parser.class { Parser }
-
-%define api.namespace { shell::parser }
-
-%code requires
-{
-    #include "shell/parser/scanner.hpp"
-    #include "shell/parser/parser.y.hpp"
-    
-    namespace shell::parser
-    {
-        class Scanner;
-        class Parser;
-    }
-}
 
 %code top
 {
-    #include "shell/parser/scanner.hpp"
+    #include <iostream>
+    #include <string>
     #include "shell/parser/parser.y.hpp"
+    #include "shell/parser/lexer.hpp"
+    #include "shell/shell.hpp"
 
-    static shell::parser::Parser::symbol_type yylex(shell::parser::Scanner& scanner, shell::parser::Interpreter& interpreter)
+    static shell::Parser::symbol_type yylex(shell::Lexer& lexer, shell::Shell& driver)
     {
-        return scanner.yylex();
+        return lexer.get_next_token(driver);
+    }
+
+    using namespace shell;
+}
+
+%lex-param { shell::Lexer& lexer }
+%lex-param { shell::Shell& driver }
+
+%parse-param { shell::Lexer& lexer }
+%parse-param { shell::Shell& driver }
+
+
+%code requires
+{
+    namespace shell
+    {
+        class Parser;
+        class Lexer;
     }
 }
 
-%{
+%code
+{
 
-#include <stdio.h>
+}
 
-void yyerror(const char* s) {
-    printf("Error: %s\n", s);
-}    
-
-extern int yylex();
-
-%}
-
-%token IDENTIFIER
-%token NUMBER_LITERAL
-%token STRING_LITERAL
-%token VARIABLE_REF
-%token STATEMENT_END
+%token <std::string> token;
 
 %start program
 
 %%
 
 program
-    : statement_list {
-        printf("program\n");
-    }
-    | /* empty */
+    : token { std::cout << $1 << '\n'; }
     ;
 
-statement_list
-    : statement statement_list {
-        printf("statement list\n");
-    }
-    | statement {
-        printf("statement list end\n");
-    }
-    ;
-
-statement
-    : command_call STATEMENT_END {
-        printf("statement\n");
-    }
-    ;
-
-command_call
-    : IDENTIFIER command_arg_list {
-        printf("command call with list\n");
-    }
-    | IDENTIFIER {
-        printf("command call\n");
-    }
-    ;
-
-command_arg_list
-    : command_arg_list command_arg {
-        printf("command arg list\n");
-    }
-    | command_arg {
-        printf("command arg list end\n");
-    }
-    ;
-
-command_arg
-    : IDENTIFIER '=' expression {
-        printf("named command arg\n");
-    }
-    | IDENTIFIER {
-        printf("named flag\n");
-    }
-    | expression {
-        printf("nameless arg\n");
-    }
-    ;
-
-expression
-    : NUMBER_LITERAL
-    | STRING_LITERAL
-    ;
 
 %%
-
