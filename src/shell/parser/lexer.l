@@ -16,7 +16,6 @@
 
 %%
 
-
 [^ \n\t\r]+ {
     return shell::Parser::make_TOKEN(yytext);
 }

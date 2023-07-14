@@ -1,7 +1,6 @@
 
 %require "3.2"
 
-
 %language "c++"
 
 // Tell Bison that we want to use a variant type for semantic values rather than a union. 
@@ -15,52 +14,53 @@
 %define api.namespace { shell }
 %define api.parser.class { Parser }
 
-%code top
+%code requires
 {
     #include <iostream>
     #include <string>
-    #include "shell/parser/parser.y.hpp"
-    #include "shell/parser/lexer.hpp"
+    
+    namespace shell
+    {
+        class Lexer;
+        class Shell;
+    }
+}
+
+%code top
+{
+    #include <iostream>
+
     #include "shell/shell.hpp"
 
-    static shell::Parser::symbol_type yylex(shell::Lexer& lexer, shell::Shell& driver)
+    static shell::Parser::symbol_type yylex(shell::Lexer & lexer, shell::Shell & driver)
     {
-        return lexer.get_next_token(driver);
+        return lexer.get_next_token();
     }
 
     using namespace shell;
 }
 
-%lex-param { shell::Lexer& lexer }
-%lex-param { shell::Shell& driver }
+%lex-param { shell::Lexer & lexer }
+%lex-param { shell::Shell & driver }
 
-%parse-param { shell::Lexer& lexer }
-%parse-param { shell::Shell& driver }
+%parse-param { shell::Lexer & lexer }
+%parse-param { shell::Shell & driver }
 
 
-%code requires
-{
-    namespace shell
-    {
-        class Parser;
-        class Lexer;
-    }
-}
-
-%code
-{
-
-}
-
-%token <std::string> token;
+%token <std::string> TOKEN;
 
 %start program
 
 %%
 
 program
-    : token { std::cout << $1 << '\n'; }
+    : TOKEN { std::cout << $1 << '\n'; }
     ;
 
 
 %%
+
+void shell::Parser::error(std::string const& message)
+{
+    std::cerr << "Error: " << message << '\n';
+}

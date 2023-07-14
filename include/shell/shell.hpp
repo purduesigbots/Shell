@@ -1,9 +1,13 @@
-#pragma once
+#ifndef SHELL_HPP_INCLUDED
+#define SHELL_HPP_INCLUDED
 
 #include <stdio.h>
 #include <iostream>
 #include <map>
 #include <string>
+
+#include "shell/parser/parser.y.hpp"
+#include "shell/parser/lexer.hpp"
 
 namespace shell {
 
@@ -38,6 +42,15 @@ public:
 private:
     std::string                     _prompt;
     std::map<std::string, void*>    _commands;
+
+    Lexer _lexer;
+    Parser _parser; 
+
+    friend class Parser;
+    friend class Lexer;
 };
 
 } // namespace shell
+
+
+#endif//SHELL_HPP_INCLUDED

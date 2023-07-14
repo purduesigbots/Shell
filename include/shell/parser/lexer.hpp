@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LEXER_HPP_INCLUDED
+#define LEXER_HPP_INCLUDED
 
 #if !defined(yyFlexLexerOnce)
     #undef yyFlexLexer
@@ -10,22 +11,27 @@
 #define YY_DECL shell::Parser::symbol_type shell::Lexer::get_next_token()
 
 #include "shell/parser/parser.y.hpp"
-#include "shell/shell.hpp"
 
 namespace shell {
 
-class Lexer : public yyFlexLexer
-{
-public:
-    Lexer(Shell& driver) : _driver(driver) {}
+    class Shell;
 
-    virtual ~Lexer() {}
+    class Lexer : public yyFlexLexer
+    {
+    public:
+        Lexer(Shell& driver) : _driver(driver) {}
 
-    virtual shell::Parser::symbol_type get_next_token();
+        virtual ~Lexer() {}
 
-private:
-    Shell& _driver;
+        virtual shell::Parser::symbol_type get_next_token();
 
-};
+    private:
+        Shell& _driver;
+    };
 
-}
+} // namespace shell
+
+
+#include "shell/shell.hpp"
+
+#endif//LEXER_HPP_INCLUDED
