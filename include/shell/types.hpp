@@ -14,7 +14,7 @@ struct Number
 
 inline std::ostream& operator<<(std::ostream& os, const Number& num)
 {
-    os << num.value << num.suffix << std::endl;
+    os << num.value << num.suffix;
     return os;
 }
 
