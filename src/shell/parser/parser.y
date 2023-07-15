@@ -37,6 +37,8 @@
     #include <iostream>
     #include <string>
 
+    #include "shell/types.hpp"
+
     // Forward declare the classes we need here.
     namespace shell
     {
@@ -68,6 +70,9 @@
     using namespace shell;
 }
 
+%code {
+}
+
 //======================================================================================================================
 // PARAMETER DEFINITIONS
 //======================================================================================================================
@@ -83,7 +88,10 @@
 //======================================================================================================================
 // TOKEN DEFINITIONS
 //======================================================================================================================
-%token <std::string> TOKEN;
+%token <std::string> IDENTIFIER STRING_LITERAL
+%token <bool> BOOL_LITERAL
+%token <shell::Number> NUMBER_LITERAL 
+%token STATEMENT_END 
 
 
 //======================================================================================================================
@@ -93,7 +101,6 @@
 // Name the start non-terminal we're going to use.
 %start program
 
-
 //======================================================================================================================
 // PARSER RULES
 //======================================================================================================================
@@ -101,10 +108,56 @@
 %%
 
 program
-    : program TOKEN
-    | TOKEN { std::cout << $1 << '\n'; }
+    : statement_list
     ;
 
+statement_list
+    : statement_list statement
+    | statement
+    ;
+
+statement
+    : statement_body STATEMENT_END
+    ;
+
+statement_body
+    : command_call
+    ;
+
+command_call
+    : IDENTIFIER command_args { 
+        std::cout << "Calling Command \"" << $1 << "\"" << std::endl;
+    }
+    ;
+
+command_args
+    : command_args command_arg
+    | command_arg
+    ;
+
+command_arg
+    : IDENTIFIER '=' expression {
+        std::cout << "With named argument \"" << $1 << "\"" << std::endl;
+    }
+    | IDENTIFIER {
+        std::cout << "With flag \"" << $1 << "\" set" << std::endl;
+    }
+    | expression {
+        std::cout << "With unnamed argument" << std::endl;
+    }
+    ;
+
+expression
+    : NUMBER_LITERAL {
+        std::cout << "Equal to " << $1 << std::endl;
+    }
+    | BOOL_LITERAL {
+        std::cout << "Equal to " << $1 << std::endl;
+    }
+    | STRING_LITERAL {
+        std::cout << "Equal to \"" << $1 << "\"" << std::endl;
+    }
+    ;
 
 %%
 

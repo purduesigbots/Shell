@@ -8,6 +8,7 @@
 
 #include "shell/parser/parser.hpp"
 #include "shell/parser/lexer.hpp"
+#include "shell/types.hpp"
 
 namespace shell {
 
