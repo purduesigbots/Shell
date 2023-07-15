@@ -15,7 +15,7 @@ Shell::~Shell()
 
 void Shell::runInteractive(std::istream& input, std::ostream& output, std::ostream& error)
 {
-    
+    _parser.parse();
 }
 
 void Shell::setPrompt(std::string prompt)

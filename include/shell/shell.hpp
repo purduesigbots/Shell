@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 
-#include "shell/parser/parser.y.hpp"
+#include "shell/parser/parser.hpp"
 #include "shell/parser/lexer.hpp"
 
 namespace shell {

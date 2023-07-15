@@ -10,7 +10,7 @@
 #undef YY_DECL
 #define YY_DECL shell::Parser::symbol_type shell::Lexer::get_next_token()
 
-#include "shell/parser/parser.y.hpp"
+#include "shell/parser/parser.hpp"
 
 namespace shell {
 
