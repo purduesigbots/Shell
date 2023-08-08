@@ -1,6 +1,6 @@
 rm -f parser parser.y.cpp parser.y.hpp lexer.l.cpp
 
-bison -o parser.y.cpp --defines=../include/shell/parser/parser.y.hpp ../src/shell/Parser/parser.y
+bison -o parser.y.cpp --defines=../include/shell/parser/parser.y.hpp ../src/shell/Parser/parser.y --report=all
 if [[ "$?" != 0 ]]; then
     echo "Failed to generate parser.y.cpp"
     exit 1

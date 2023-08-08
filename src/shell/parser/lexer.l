@@ -1,3 +1,9 @@
+    /*
+     * lexer.l
+     *
+     * This file contains the lexer (aka tokenizer) for this language. The functionality here gets exported to the
+     * Lexer class after Flex compiles this program.
+     */
 
 %{
     #include <iostream>
@@ -27,7 +33,7 @@ LETTER      [a-zA-Z]
 
 %%
 
-    /* Comment Token */
+    /* Comment "Token" */
 \#[^\n]*\n {
     /* Purposefully ignore the comment */
 }
@@ -68,22 +74,31 @@ LETTER      [a-zA-Z]
     return shell::Parser::make_STRING_LITERAL(value);
 }
 
-\n|; {
+    /* A statment ends either with a new line or semicolon */
+\n|; { 
     std::cout << "Token: STATEMENT_END" << std::endl;
     return shell::Parser::make_STATEMENT_END();
 }
 
+    /* An identifier token. These are typically used for identifying variables, functions, flags, etc.
+     */
 {ID_START}{ID_CHAR}* {
     std::cout << "Token: IDENTIFIER \"" << yytext << "\"" << std::endl;
     
     return shell::Parser::make_IDENTIFIER(yytext);
 }
 
+\= { return shell::Parser::make_EQUALS(); }
+\( { return shell::Parser::make_LEFT_PAREN(); }
+\) { return shell::Parser::make_RIGHT_PAREN(); }
+\, { return shell::Parser::make_COMMA(); }
+
     /* Ignore the rest of the whitespace */
-[\n\t ] {
+[\r\t ] {
     /* Ignore whitespace */
 }
 
+    /* If we get here, then we have an unknown character. This should remain the last token in the file */
 . {
     std::cerr << "Lexer: Unknown Character \"" << yytext << "\"" << std::endl;
 }

@@ -1,5 +1,8 @@
 #include "shell/shell.hpp"
 
+#include "shell/parser/parser.hpp"
+#include "shell/parser/lexer.hpp"
+
 namespace shell {
 
 Shell::Shell()

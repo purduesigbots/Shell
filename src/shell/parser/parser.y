@@ -1,5 +1,9 @@
 /** 
+ * This file contains the Bison grammer for the shell language. It is used by bison to generate the parser.
  *
+ * Bison exports this parser as the "shell::Parser" class, which is then used by the Shell class to read the input.
+ *
+ * 
  */
 
 //======================================================================================================================
@@ -36,10 +40,11 @@
     // Include the libraries our parser's header needs
     #include <iostream>
     #include <string>
-
+    
     #include "shell/types.hpp"
 
-    // Forward declare the classes we need here.
+    // Forward declare the dependent classes for the parser here. If we include the header files, we'll get a circular
+    // dependency.
     namespace shell
     {
         class Lexer;
@@ -91,7 +96,14 @@
 %token <std::string> IDENTIFIER STRING_LITERAL
 %token <bool> BOOL_LITERAL
 %token <shell::Number> NUMBER_LITERAL 
-%token STATEMENT_END 
+%token STATEMENT_END
+
+%token 
+    EQUALS "="
+    LEFT_PAREN "("
+    RIGHT_PAREN ")"
+    COMMA ","
+    ;
 
 
 //======================================================================================================================
@@ -131,24 +143,35 @@ command_call
     ;
 
 command_args
-    : command_args command_arg
+    : command_arg_list {
+        std::cout << "with arguments" << std::endl;
+    }
+    | {
+        std::cout << "with no arguments" << std::endl;
+    }
+    ;
+
+command_arg_list
+    : command_arg_list command_arg
     | command_arg
     ;
 
 command_arg
-    : IDENTIFIER '=' expression {
+    : IDENTIFIER "=" expression {
         std::cout << "With named argument \"" << $1 << "\"" << std::endl;
-    }
-    | IDENTIFIER {
-        std::cout << "With flag \"" << $1 << "\" set" << std::endl;
     }
     | expression {
         std::cout << "With unnamed argument" << std::endl;
     }
+    | IDENTIFIER {
+        std::cout << "With flag \"" << $1 << "\" set" << std::endl;
+    }
+    
     ;
 
 expression
-    : NUMBER_LITERAL {
+    : tuple_expression
+    | NUMBER_LITERAL {
         std::cout << "Equal to " << $1 << std::endl;
     }
     | BOOL_LITERAL {
@@ -157,6 +180,17 @@ expression
     | STRING_LITERAL {
         std::cout << "Equal to \"" << $1 << "\"" << std::endl;
     }
+    ;
+
+tuple_expression
+    : "(" tuple_value_list ")" {
+        std::cout << "Equal to tuple" << std::endl;
+    }
+    ;
+
+tuple_value_list
+    : expression "," tuple_value_list
+    | expression
     ;
 
 %%
