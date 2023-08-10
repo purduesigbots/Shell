@@ -6,7 +6,6 @@
 #include <map>
 
 #include "shell/types.hpp"
-
 namespace shell
 {
 
@@ -63,5 +62,7 @@ protected:
     std::vector<ArgumentInfo>               arguments; 
     std::map<std::string, ArgumentInfo*>    namedLookup;
 };
+
+using CommandCallback = bool(*)(const CommandArgs args);
 
 } // namespace shell

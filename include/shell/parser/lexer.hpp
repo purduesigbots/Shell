@@ -26,6 +26,10 @@ namespace shell {
         virtual shell::Parser::symbol_type get_next_token();
 
     private:
+        shell::location _currentLocation;
+
+        void updateLocation() { printf("UPDATING LOCATION"); }
+
         Shell& _driver;
     };
 

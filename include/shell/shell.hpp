@@ -8,7 +8,9 @@
 
 #include "shell/parser/parser.hpp"
 #include "shell/parser/lexer.hpp"
+#include "shell/parser/location.y.hpp"
 #include "shell/types.hpp"
+#include "shell/command.hpp"
 
 namespace shell {
 
@@ -40,12 +42,20 @@ public:
      */
     void setPrompt(std::string prompt);
 
+    /**
+     * @brief Adds a command to the shell environment
+     * 
+     * @param name The name of the command
+     * @param callback The callback to call when the command is executed
+     */
+    void registerCommand(std::string name, CommandCallback callback);
+
 private:
-    std::string                     _prompt;
-    std::map<std::string, void*>    _commands;
+    std::string                                 _prompt;
+    std::map<std::string, CommandCallback>     _commands;
 
     Lexer _lexer;
-    Parser _parser; 
+    Parser _parser;
 
     friend class Parser;
     friend class Lexer;

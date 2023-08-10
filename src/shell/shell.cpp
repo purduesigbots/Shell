@@ -26,4 +26,9 @@ void Shell::setPrompt(std::string prompt)
     _prompt = prompt;
 }
 
+void Shell::registerCommand(std::string name, CommandCallback callback)
+{
+    _commands.insert(std::make_pair(name, callback));
+}
+
 } // namespace shell

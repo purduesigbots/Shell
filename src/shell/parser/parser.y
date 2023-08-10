@@ -25,6 +25,12 @@
 %define api.namespace { shell }
 %define api.parser.class { Parser }
 
+// We want location data for better error reporting
+%locations 
+%define api.location.file "location.y.hpp"
+
+%define parse.error verbose
+
 //======================================================================================================================
 // CODE INSERTION BLOCKS
 //======================================================================================================================
@@ -93,11 +99,19 @@
 //======================================================================================================================
 // TOKEN DEFINITIONS
 //======================================================================================================================
+
+%token END 0
+
+// These tokens each contain semantic values associated with the token. These values are extracted by the Lexer.
 %token <std::string> IDENTIFIER STRING_LITERAL
 %token <bool> BOOL_LITERAL
 %token <shell::Number> NUMBER_LITERAL 
+
+// These tokens have no semantic value associated with them. They simply mark important parts of the code.
 %token STATEMENT_END
 
+// These tokens are defined with both a name and a string. Either can be used to refer to the token, but the string
+// lets us use the specific chracter sequence of the token in the grammer below.
 %token 
     EQUALS "="
     LEFT_PAREN "("
@@ -115,6 +129,9 @@
 
 //======================================================================================================================
 // PARSER RULES
+// These define the grammer of the language. The Bison parser will use these rules to parse the input.
+// Each rule contains a list of tokens and sub-rules that are used to match the input, and a body of C++ code that
+// executes when the rule is matched with the input. 
 //======================================================================================================================
 
 %%
@@ -127,6 +144,11 @@ statement_list
     : statement_list statement
     | statement
     ;
+
+
+//----------------------------------------------------------------------------------------------------------------------    
+// Statements:
+// 
 
 statement
     : statement_body STATEMENT_END
@@ -169,6 +191,10 @@ command_arg
     
     ;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Expressions:
+// Expresssions result in a value when executed. 
+
 expression
     : tuple_expression
     | NUMBER_LITERAL {
@@ -196,7 +222,9 @@ tuple_value_list
 %%
 
 // Error reporting function. This is called by Bison when it encounters a syntax error.
-void shell::Parser::error(std::string const& message)
+void shell::Parser::error(const location &loc , const std::string &message)
 {
-    std::cerr << "Error: " << message << '\n';
+    position begin = loc.begin;
+
+    std::cerr << "Error at " << begin.filename << ":" << begin.line << ":" << begin.column << std::endl;;
 }

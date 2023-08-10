@@ -5,6 +5,28 @@
      * Lexer class after Flex compiles this program.
      */
 
+     
+    //==================================================================================================================
+    // SETTINGS FOR FLEX
+    // These directives instruct flex how to generate the Lexer. 
+    //==================================================================================================================
+
+    // Tell Flex that we want to generate the lexer as a C++ class.
+%option c++
+
+%option noyywrap
+
+    // We do not want Flex to generate a default rule for us. Any token that is not matched by one of the rules below is
+    // considered an error.
+%option nodefault
+
+    // Tell Flex the name of the class to generate, as well as a prefix to give to the class. 
+%option yyclass="Lexer"
+%option prefix="shell_"
+
+    //==================================================================================================================
+    // CODE INSERTION BLOCKS
+    //==================================================================================================================
 %{
     #include <iostream>
     #include <cstdlib>
@@ -12,26 +34,33 @@
     #include "shell/parser/parser.hpp"
 
     #include "shell/types.hpp"
+
+    #define YY_USER_ACTION updateLocation();
+
+    // Since we are using variants for storing the values of tokens, we need to define yyterminate() to return a
+    // specific token. Otherwise, Flex will return 0 as a int, causing type errors to occur. 
+    #define yyterminate() shell::Parser::make_END(_currentLocation);
 %}
 
-%option c++
-
-%option noyywrap
-%option nodefault
-
-%option yyclass="Lexer"
-%option prefix="shell_"
-
-    //==========================================================================
+    //==================================================================================================================
     // REGULAR DEFINITIONS
-    //==========================================================================
+    // These are names for regular expressions used throughout the Lexer. These make the regular expressions for each
+    // each token more readable.
+    //==================================================================================================================
 
 DIGIT       [0-9]
 ID_START    [a-zA-Z_]
 ID_CHAR     [a-zA-Z0-9_]
 LETTER      [a-zA-Z]
 
+
 %%
+    //==================================================================================================================
+    // LEXER RULES
+    // These are the rules that Flex uses to generate the Lexer. Each rule is comprised of a regular expression and a 
+    // body of C++ code that executes when the specific token is found. Some rules simply create a token and return it
+    // while others do additional processing and extract extra information from the input. 
+    //==================================================================================================================    
 
     /* Comment "Token" */
 \#[^\n]*\n {
@@ -42,7 +71,6 @@ LETTER      [a-zA-Z]
 {DIGIT}+(\.{DIGIT}*)?{LETTER}* {
     // Since numbers in this language are comprised of a numerical value and a unit suffix, need to do some extra work
     // to parse the number literal token.
-
     std::string text(yytext);
 
     // Find the first index of the suffix part
@@ -59,7 +87,7 @@ LETTER      [a-zA-Z]
     }
     
     // Finally return the token
-    return shell::Parser::make_NUMBER_LITERAL(shell::Number{value, suffixPart});
+    return shell::Parser::make_NUMBER_LITERAL(shell::Number{value, suffixPart}, _currentLocation);
 }
 
     /* String Literal Token */
@@ -71,13 +99,13 @@ LETTER      [a-zA-Z]
 
     std::cout << "Token: STRING_LITERAL \"" << value << "\"" << std::endl;
 
-    return shell::Parser::make_STRING_LITERAL(value);
+    return shell::Parser::make_STRING_LITERAL(value, _currentLocation);
 }
 
     /* A statment ends either with a new line or semicolon */
 \n|; { 
     std::cout << "Token: STATEMENT_END" << std::endl;
-    return shell::Parser::make_STATEMENT_END();
+    return shell::Parser::make_STATEMENT_END(_currentLocation);
 }
 
     /* An identifier token. These are typically used for identifying variables, functions, flags, etc.
@@ -85,13 +113,13 @@ LETTER      [a-zA-Z]
 {ID_START}{ID_CHAR}* {
     std::cout << "Token: IDENTIFIER \"" << yytext << "\"" << std::endl;
     
-    return shell::Parser::make_IDENTIFIER(yytext);
+    return shell::Parser::make_IDENTIFIER(yytext, _currentLocation);
 }
 
-\= { return shell::Parser::make_EQUALS(); }
-\( { return shell::Parser::make_LEFT_PAREN(); }
-\) { return shell::Parser::make_RIGHT_PAREN(); }
-\, { return shell::Parser::make_COMMA(); }
+\= { return shell::Parser::make_EQUALS(_currentLocation); }
+\( { return shell::Parser::make_LEFT_PAREN(_currentLocation); }
+\) { return shell::Parser::make_RIGHT_PAREN(_currentLocation); }
+\, { return shell::Parser::make_COMMA(_currentLocation); }
 
     /* Ignore the rest of the whitespace */
 [\r\t ] {
