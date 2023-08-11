@@ -35,7 +35,9 @@
 
     #include "shell/types.hpp"
 
-    #define YY_USER_ACTION updateLocation();
+    // YY_USER_ACTION is called whenever a rule is matched, and we redefine it here to update the current location of
+    // the scanning stream. 
+    #define YY_USER_ACTION updateLocation(yyleng, yytext);
 
     // Since we are using variants for storing the values of tokens, we need to define yyterminate() to return a
     // specific token. Otherwise, Flex will return 0 as a int, causing type errors to occur. 
@@ -133,4 +135,21 @@ LETTER      [a-zA-Z]
 
 %%
 
+namespace shell {
 
+    void Lexer::updateLocation(int length, const char* text)
+    {
+        _currentLocation.begin.line = _currentLocation.end.line;
+        _currentLocation.begin.column = _currentLocation.end.column;
+
+        for(int i = 0; text[i] != '\0'; i++) {
+            if(text[i] == '\n') {
+                _currentLocation.end.line++;
+                _currentLocation.end.column = 0;
+            } else {
+                _currentLocation.end.column++;
+            }
+        }
+    }
+
+} // namespace shell
