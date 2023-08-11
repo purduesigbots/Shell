@@ -227,10 +227,6 @@ void shell::Parser::error(const location &loc , const std::string &message)
     position begin = loc.begin;
     position end  = loc.end;
 
-    std::string filename =  loc.begin.filename;
-
-    if()
-
     std::cerr << "Error at " << begin.filename << ":" << begin.line << ":" << begin.column << std::endl;
     std::cerr << "    " << message << std::endl;
 }

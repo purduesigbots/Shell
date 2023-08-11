@@ -16,6 +16,9 @@ namespace shell {
 
     class Shell;
 
+    /// @brief The scanner class for the shell.
+    /// @details This class is responsible for scanning and analyzing the input to brreak it into tokens and extract
+    ///          other relevant information. The implementation for this class is generated 
     class Lexer : public yyFlexLexer
     {
     public:
@@ -23,8 +26,13 @@ namespace shell {
 
         virtual ~Lexer() {}
 
+        /// @brief Returns the next token from the input stream.
+        /// @return The token
         virtual shell::Parser::symbol_type get_next_token();
 
+        /// @brief Updates the current location of the scanning stream
+        /// @param length The length of the text to be added to the current location.
+        /// @param text  The scanned text
         void updateLocation(int length, const char* text);
 
     private:

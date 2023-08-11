@@ -4,6 +4,10 @@ A programming shell designed for writing autonomous programs
 ### Features:
 - None Currently LOL
 
+# Template Support
+
+
+
 # Installing
 
 # Getting Started

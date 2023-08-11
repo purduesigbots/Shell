@@ -136,12 +136,15 @@ LETTER      [a-zA-Z]
 %%
 
 namespace shell {
-
+    // This function is called to update the location of the current parsing stream.
     void Lexer::updateLocation(int length, const char* text)
     {
+        // First, update the starting location to match the end of the previous token.
         _currentLocation.begin.line = _currentLocation.end.line;
         _currentLocation.begin.column = _currentLocation.end.column;
 
+        // Next we scan the input text and update the end location. If we reach a newline, we increment the line
+        // number and reset the column number. Otherwise, we just increment the column number.
         for(int i = 0; text[i] != '\0'; i++) {
             if(text[i] == '\n') {
                 _currentLocation.end.line++;
