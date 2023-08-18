@@ -18,4 +18,5 @@ inline std::ostream& operator<<(std::ostream& os, const Number& num)
     return os;
 }
 
+
 } // namespace shell

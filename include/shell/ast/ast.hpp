@@ -1,11 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector> 
-#include <map>
-
-namespace shell
-{
-    
-}
-
+#include "shell/ast/ast_node.hpp"
+#include "shell/ast/statement.hpp"
+#include "shell/ast/expression.hpp"

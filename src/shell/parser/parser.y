@@ -3,7 +3,9 @@
  *
  * Bison exports this parser as the "shell::Parser" class, which is then used by the Shell class to read the input.
  *
- * 
+ * Misc. Notes:
+ * - Since we are working in a C++ parser using variants instead of unions, there is no %union block. Instead, each
+ *   token and non-terminal are marked with the type of the semantic value they contain.
  */
 
 //======================================================================================================================
@@ -48,6 +50,7 @@
     #include <string>
     
     #include "shell/types.hpp"
+    #include "shell/ast/ast.hpp"
 
     // Forward declare the dependent classes for the parser here. If we include the header files, we'll get a circular
     // dependency.
@@ -70,6 +73,7 @@
 
     #include "shell/shell.hpp"
 
+
     // Since our lexer is exporting as C++ rather than C, yylex won't be defined. The parser calls yylex to get the
     // next token, so we need to define and implmenet it manually. This function simply calls the lexer's get_next_token
     // funciton.
@@ -79,9 +83,6 @@
     }
 
     using namespace shell;
-}
-
-%code {
 }
 
 //======================================================================================================================
@@ -97,7 +98,10 @@
 %parse-param { shell::Shell & driver }
 
 //======================================================================================================================
-// TOKEN DEFINITIONS
+// TOKEN AND NONTERMINAL TYPE DEFINITIONS
+//
+// NOTE: Since we are using a C++ parser with variants, there is no %union block. Instead, each token and non-terminal
+//       are marked with a type in angle brackets.
 //======================================================================================================================
 
 %token END 0
@@ -119,6 +123,13 @@
     COMMA ","
     ;
 
+// Types for non-terminals:
+
+%type <shell::CommandCall> command_call
+
+%type <shell::Expression> expression
+%type <shell::TupleExpression> tuple_expression
+%type <std::vector<shell::Expression>> tuple_value_list
 
 //======================================================================================================================
 // MISC DEFINITIONS
@@ -196,27 +207,34 @@ command_arg
 // Expresssions result in a value when executed. 
 
 expression
-    : tuple_expression
+    : tuple_expression {
+        $$ = $1;
+    }
     | NUMBER_LITERAL {
-        std::cout << "Equal to " << $1 << std::endl;
+        $$ = NumberLiteral($1);
     }
     | BOOL_LITERAL {
-        std::cout << "Equal to " << $1 << std::endl;
+        $$ = BoolLiteral($1);
     }
     | STRING_LITERAL {
-        std::cout << "Equal to \"" << $1 << "\"" << std::endl;
+        $$ = StringLiteral($1);
     }
     ;
 
 tuple_expression
     : "(" tuple_value_list ")" {
-        std::cout << "Equal to tuple" << std::endl;
+        $$ = TupleExpression($2);
     }
     ;
 
 tuple_value_list
-    : expression "," tuple_value_list
-    | expression
+    : expression "," tuple_value_list {
+        $$ = $3;
+        $$.insert($$.begin(), $1);
+    }
+    | expression {
+        $$ = std::vector<Expression> { $1 };
+    }
     ;
 
 %%

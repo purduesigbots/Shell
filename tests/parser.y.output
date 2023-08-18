@@ -65,7 +65,7 @@ Nonterminals, with rules where they appear
     statement_body (16)
         on left: 5
         on right: 4
-    command_call (17)
+    command_call <shell::CommandCall> (17)
         on left: 6
         on right: 5
     command_args (18)
@@ -77,13 +77,13 @@ Nonterminals, with rules where they appear
     command_arg (20)
         on left: 11 12 13
         on right: 9 10
-    expression (21)
+    expression <shell::Expression> (21)
         on left: 14 15 16 17
         on right: 11 12 19 20
-    tuple_expression (22)
+    tuple_expression <shell::TupleExpression> (22)
         on left: 18
         on right: 14
-    tuple_value_list (23)
+    tuple_value_list <std::vector<shell::Expression>> (23)
         on left: 19 20
         on right: 18 19
 

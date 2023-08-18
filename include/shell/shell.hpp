@@ -52,7 +52,7 @@ public:
 
 private:
     std::string                                 _prompt;
-    std::map<std::string, CommandCallback>     _commands;
+    std::map<std::string, CommandCallback>      _commands;
 
     Lexer _lexer;
     Parser _parser;

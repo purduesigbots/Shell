@@ -1,6 +1,8 @@
 #ifndef LEXER_HPP_INCLUDED
 #define LEXER_HPP_INCLUDED
 
+// If yyFlexLexerOnce is not defined, then we need to undefine yyFlexLexer and define it to our own lexer class.
+// This is done to avoid name conflicts if multiple lexers are added to the same project.
 #if !defined(yyFlexLexerOnce)
     #undef yyFlexLexer
     #define yyFlexLexer shell_FlexLexer

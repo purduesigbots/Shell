@@ -146,9 +146,20 @@ This roadmap may be subject to changes as the priority of features change, or as
   - These act as multi-line strings
   - Still not sure about this feature. Could be dangerous to give users this power
 
-### Version 0.8 (The functional update?)
+### Version 0.8 (The convienence update)
+- THIS UPDATE MIGHT BREAK COMPATABILITY
+- Improved C++ api for commands
+  - Command builder
+  - Automated checking for command arguments
+  - Automatic help functionality?
+- 
 
-### Version 0.9 ()
+### Version 0.9 (The functional update)
+- Adds functions to the shell language
+  - Not sure how exactly to handle this
+  - Maybe make functions look just like commands?
+
+### Version 0.10 ()
 
 ## Stable Releases
 
@@ -160,4 +171,9 @@ This roadmap may be subject to changes as the priority of features change, or as
   - ARMS
   - Lemlib
   - SyLib
+
+
+
+
+
   - Legs (If it exists)
