@@ -50,7 +50,6 @@
     #include <string>
     
     #include "shell/types.hpp"
-    #include "shell/ast/ast.hpp"
 
     // Forward declare the dependent classes for the parser here. If we include the header files, we'll get a circular
     // dependency.
@@ -123,13 +122,7 @@
     COMMA           ","
     ;
 
-// Types for non-terminals:
-
-%type <shell::CommandCall> command_call
-
-%type <shell::Expression> expression
-%type <shell::TupleExpression> tuple_expression
-%type <std::vector<shell::Expression>> tuple_value_list
+// TODO: Types for non-terminals:
 
 //======================================================================================================================
 // MISC DEFINITIONS
@@ -211,32 +204,24 @@ command_arg
 
 expression
     : tuple_expression {
-        $$ = $1;
     }
     | NUMBER_LITERAL {
-        $$ = NumberLiteral($1);
     }
     | BOOL_LITERAL {
-        $$ = BoolLiteral($1);
     }
     | STRING_LITERAL {
-        $$ = StringLiteral($1);
     }
     ;
 
 tuple_expression
     : "(" tuple_value_list ")" {
-        $$ = TupleExpression($2);
     }
     ;
 
 tuple_value_list
     : expression "," tuple_value_list {
-        $$ = $3;
-        $$.insert($$.begin(), $1);
     }
     | expression {
-        $$ = std::vector<Expression> { $1 };
     }
     ;
 
