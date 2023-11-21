@@ -10,7 +10,7 @@
 #endif
 
 #undef YY_DECL
-#define YY_DECL shell::Parser::symbol_type shell::Lexer::get_next_token()
+#define YY_DECL shell::yyBisonParser::symbol_type shell::Lexer::get_next_token()
 
 #include "shell/parser/parser.hpp"
 
@@ -42,7 +42,6 @@ namespace shell {
 
         Shell& _driver;
     };
-
 } // namespace shell
 
 

@@ -7,3 +7,21 @@
 #pragma once
 
 #include "shell/parser/parser.y.hpp"
+
+namespace shell {
+
+    class Parser : public yyBisonParser
+    {
+    public:
+        Parser(shell::Lexer& _lexer, shell::Shell& _shell)
+        : yyBisonParser(_lexer, _shell)
+        {
+
+        }
+
+        void parseNextLine() {}
+
+        void parseProgram() {}
+    };
+
+} // namespace shell

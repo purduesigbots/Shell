@@ -25,11 +25,10 @@
 %define api.token.constructor
 
 %define api.namespace { shell }
-%define api.parser.class { Parser }
+%define api.parser.class { yyBisonParser }
 
 // We want location data for better error reporting
 %locations 
-%define api.location.file "location.y.hpp"
 
 %define parse.error verbose
 
@@ -49,6 +48,8 @@
     #include <iostream>
     #include <string>
     
+    #include "shell/parser/location.y.hpp"
+
     #include "shell/types.hpp"
 
     // Forward declare the dependent classes for the parser here. If we include the header files, we'll get a circular
@@ -76,7 +77,7 @@
     // Since our lexer is exporting as C++ rather than C, yylex won't be defined. The parser calls yylex to get the
     // next token, so we need to define and implmenet it manually. This function simply calls the lexer's get_next_token
     // funciton.
-    static shell::Parser::symbol_type yylex(shell::Lexer & lexer, shell::Shell & driver)
+    static shell::yyBisonParser::symbol_type yylex(shell::Lexer & lexer, shell::Shell & driver)
     {
         return lexer.get_next_token();
     }
@@ -228,7 +229,7 @@ tuple_value_list
 %%
 
 // Error reporting function. This is called by Bison when it encounters a syntax error.
-void shell::Parser::error(const location &loc , const std::string &message)
+void shell::yyBisonParser::error(const location &loc , const std::string &message)
 {
     position begin = loc.begin;
     position end  = loc.end;
