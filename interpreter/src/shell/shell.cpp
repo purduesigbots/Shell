@@ -6,7 +6,7 @@
 namespace shell {
 
 Shell::Shell()
-: _lexer(*this), _parser(_lexer, *this)
+: _lexer(), _parser(_lexer)
 {
     
 }
@@ -18,7 +18,11 @@ Shell::~Shell()
 
 void Shell::runInteractive(std::istream& input, std::ostream& output, std::ostream& error)
 {
-    _parser.parse();
+    while(auto astOptional = _parser.parseNextStatement()) {
+        AstNode astTree = astOptional.value();
+
+        astTree.print(output);
+    }
 }
 
 void Shell::setPrompt(std::string prompt)

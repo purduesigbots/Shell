@@ -24,7 +24,7 @@ namespace shell {
     class Lexer : public yyFlexLexer
     {
     public:
-        Lexer(Shell& driver) : _driver(driver) {}
+        Lexer() {}
 
         virtual ~Lexer() {}
 
@@ -39,8 +39,6 @@ namespace shell {
 
     private:
         shell::location _currentLocation;
-
-        Shell& _driver;
     };
 } // namespace shell
 

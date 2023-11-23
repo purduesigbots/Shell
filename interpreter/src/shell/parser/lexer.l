@@ -33,7 +33,7 @@
     #include "shell/parser/lexer.hpp"
     #include "shell/parser/parser.hpp"
 
-    #include "shell/types.hpp"
+    #include "shell/data.hpp"
 
     // YY_USER_ACTION is called whenever a rule is matched, and we redefine it here to update the current location of
     // the scanning stream. 

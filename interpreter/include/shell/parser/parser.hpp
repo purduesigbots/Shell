@@ -6,22 +6,38 @@
 
 #pragma once
 
+#include <optional>
+
 #include "shell/parser/parser.y.hpp"
+#include "shell/ast/ast.hpp"
 
 namespace shell {
 
     class Parser : public yyBisonParser
     {
     public:
-        Parser(shell::Lexer& _lexer, shell::Shell& _shell)
-        : yyBisonParser(_lexer, _shell)
+        Parser(shell::Lexer& _lexer)
+        : yyBisonParser(_lexer, *this)
         {
 
         }
 
-        void parseNextLine() {}
+        /**
+         * @brief Parses the next statement in the input stream.
+         */
+        // TODO: Implement
+        std::optional<AstNode> parseNextStatement();
 
-        void parseProgram() {}
+        /**
+         * @brief Parses the input stream until the end of the file
+         */
+        // TODO: Implement
+        std::optional<AstNode> parseFile();
+        
+        friend class yyBisonParser;
+
+    protected:
+        bool    stopAfterStatement = false;
     };
 
 } // namespace shell

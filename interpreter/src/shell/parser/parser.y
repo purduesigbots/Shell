@@ -50,13 +50,14 @@
     
     #include "shell/parser/location.y.hpp"
 
-    #include "shell/types.hpp"
+    #include "shell/data.hpp"
 
     // Forward declare the dependent classes for the parser here. If we include the header files, we'll get a circular
     // dependency.
     namespace shell
     {
         class Lexer;
+        class Parser; 
         class Shell;
     }
 }
@@ -73,11 +74,10 @@
 
     #include "shell/shell.hpp"
 
-
     // Since our lexer is exporting as C++ rather than C, yylex won't be defined. The parser calls yylex to get the
     // next token, so we need to define and implmenet it manually. This function simply calls the lexer's get_next_token
     // funciton.
-    static shell::yyBisonParser::symbol_type yylex(shell::Lexer & lexer, shell::Shell & driver)
+    static shell::yyBisonParser::symbol_type yylex(shell::Lexer & lexer, shell::Parser & parser)
     {
         return lexer.get_next_token();
     }
@@ -91,11 +91,11 @@
 
 // Parameters that get passed to yylex(). For the call to yylex, they are passed in the order they appear in the file
 %lex-param { shell::Lexer & lexer }
-%lex-param { shell::Shell & driver }
+%lex-param { shell::Parser & parser }
 
 // The parameters that Parser::parse() takes. These are defined in in the order they appear in the file.
 %parse-param { shell::Lexer & lexer }
-%parse-param { shell::Shell & driver }
+%parse-param { shell::Parser & parser }
 
 //======================================================================================================================
 // TOKEN AND NONTERMINAL TYPE DEFINITIONS

@@ -14,7 +14,7 @@ Grammar
     6 command_call: IDENTIFIER command_args
 
     7 command_args: command_arg_list
-    8             | %empty
+    8             | ε
 
     9 command_arg_list: command_arg_list command_arg
    10                 | command_arg
@@ -65,7 +65,7 @@ Nonterminals, with rules where they appear
     statement_body (16)
         on left: 5
         on right: 4
-    command_call <shell::CommandCall> (17)
+    command_call (17)
         on left: 6
         on right: 5
     command_args (18)
@@ -77,26 +77,26 @@ Nonterminals, with rules where they appear
     command_arg (20)
         on left: 11 12 13
         on right: 9 10
-    expression <shell::Expression> (21)
+    expression (21)
         on left: 14 15 16 17
         on right: 11 12 19 20
-    tuple_expression <shell::TupleExpression> (22)
+    tuple_expression (22)
         on left: 18
         on right: 14
-    tuple_value_list <std::vector<shell::Expression>> (23)
+    tuple_value_list (23)
         on left: 19 20
         on right: 18 19
 
 
 State 0
 
-    0 $accept: . program END
-    1 program: . statement_list
-    2 statement_list: . statement_list statement
-    3               | . statement
-    4 statement: . statement_body STATEMENT_END
-    5 statement_body: . command_call
-    6 command_call: . IDENTIFIER command_args
+    0 $accept: • program END
+    1 program: • statement_list
+    2 statement_list: • statement_list statement
+    3               | • statement
+    4 statement: • statement_body STATEMENT_END
+    5 statement_body: • command_call
+    6 command_call: • IDENTIFIER command_args
 
     IDENTIFIER  shift, and go to state 1
 
@@ -109,19 +109,19 @@ State 0
 
 State 1
 
-    6 command_call: IDENTIFIER . command_args
-    7 command_args: . command_arg_list
-    8             | . %empty  [STATEMENT_END]
-    9 command_arg_list: . command_arg_list command_arg
-   10                 | . command_arg
-   11 command_arg: . IDENTIFIER "=" expression
-   12            | . expression
-   13            | . IDENTIFIER
-   14 expression: . tuple_expression
-   15           | . NUMBER_LITERAL
-   16           | . BOOL_LITERAL
-   17           | . STRING_LITERAL
-   18 tuple_expression: . "(" tuple_value_list ")"
+    6 command_call: IDENTIFIER • command_args
+    7 command_args: • command_arg_list
+    8             | ε •  [STATEMENT_END]
+    9 command_arg_list: • command_arg_list command_arg
+   10                 | • command_arg
+   11 command_arg: • IDENTIFIER "=" expression
+   12            | • expression
+   13            | • IDENTIFIER
+   14 expression: • tuple_expression
+   15           | • NUMBER_LITERAL
+   16           | • BOOL_LITERAL
+   17           | • STRING_LITERAL
+   18 tuple_expression: • "(" tuple_value_list ")"
 
     IDENTIFIER      shift, and go to state 7
     STRING_LITERAL  shift, and go to state 8
@@ -140,18 +140,18 @@ State 1
 
 State 2
 
-    0 $accept: program . END
+    0 $accept: program • END
 
     END  shift, and go to state 17
 
 
 State 3
 
-    1 program: statement_list .  [END]
-    2 statement_list: statement_list . statement
-    4 statement: . statement_body STATEMENT_END
-    5 statement_body: . command_call
-    6 command_call: . IDENTIFIER command_args
+    1 program: statement_list •  [END]
+    2 statement_list: statement_list • statement
+    4 statement: • statement_body STATEMENT_END
+    5 statement_body: • command_call
+    6 command_call: • IDENTIFIER command_args
 
     IDENTIFIER  shift, and go to state 1
 
@@ -164,29 +164,29 @@ State 3
 
 State 4
 
-    3 statement_list: statement .
+    3 statement_list: statement •
 
     $default  reduce using rule 3 (statement_list)
 
 
 State 5
 
-    4 statement: statement_body . STATEMENT_END
+    4 statement: statement_body • STATEMENT_END
 
     STATEMENT_END  shift, and go to state 19
 
 
 State 6
 
-    5 statement_body: command_call .
+    5 statement_body: command_call •
 
     $default  reduce using rule 5 (statement_body)
 
 
 State 7
 
-   11 command_arg: IDENTIFIER . "=" expression
-   13            | IDENTIFIER .  [IDENTIFIER, STRING_LITERAL, BOOL_LITERAL, NUMBER_LITERAL, STATEMENT_END, "("]
+   11 command_arg: IDENTIFIER • "=" expression
+   13            | IDENTIFIER •  [IDENTIFIER, STRING_LITERAL, BOOL_LITERAL, NUMBER_LITERAL, STATEMENT_END, "("]
 
     "="  shift, and go to state 20
 
@@ -195,35 +195,35 @@ State 7
 
 State 8
 
-   17 expression: STRING_LITERAL .
+   17 expression: STRING_LITERAL •
 
     $default  reduce using rule 17 (expression)
 
 
 State 9
 
-   16 expression: BOOL_LITERAL .
+   16 expression: BOOL_LITERAL •
 
     $default  reduce using rule 16 (expression)
 
 
 State 10
 
-   15 expression: NUMBER_LITERAL .
+   15 expression: NUMBER_LITERAL •
 
     $default  reduce using rule 15 (expression)
 
 
 State 11
 
-   14 expression: . tuple_expression
-   15           | . NUMBER_LITERAL
-   16           | . BOOL_LITERAL
-   17           | . STRING_LITERAL
-   18 tuple_expression: . "(" tuple_value_list ")"
-   18                 | "(" . tuple_value_list ")"
-   19 tuple_value_list: . expression "," tuple_value_list
-   20                 | . expression
+   14 expression: • tuple_expression
+   15           | • NUMBER_LITERAL
+   16           | • BOOL_LITERAL
+   17           | • STRING_LITERAL
+   18 tuple_expression: • "(" tuple_value_list ")"
+   18                 | "(" • tuple_value_list ")"
+   19 tuple_value_list: • expression "," tuple_value_list
+   20                 | • expression
 
     STRING_LITERAL  shift, and go to state 8
     BOOL_LITERAL    shift, and go to state 9
@@ -237,23 +237,23 @@ State 11
 
 State 12
 
-    6 command_call: IDENTIFIER command_args .
+    6 command_call: IDENTIFIER command_args •
 
     $default  reduce using rule 6 (command_call)
 
 
 State 13
 
-    7 command_args: command_arg_list .  [STATEMENT_END]
-    9 command_arg_list: command_arg_list . command_arg
-   11 command_arg: . IDENTIFIER "=" expression
-   12            | . expression
-   13            | . IDENTIFIER
-   14 expression: . tuple_expression
-   15           | . NUMBER_LITERAL
-   16           | . BOOL_LITERAL
-   17           | . STRING_LITERAL
-   18 tuple_expression: . "(" tuple_value_list ")"
+    7 command_args: command_arg_list •  [STATEMENT_END]
+    9 command_arg_list: command_arg_list • command_arg
+   11 command_arg: • IDENTIFIER "=" expression
+   12            | • expression
+   13            | • IDENTIFIER
+   14 expression: • tuple_expression
+   15           | • NUMBER_LITERAL
+   16           | • BOOL_LITERAL
+   17           | • STRING_LITERAL
+   18 tuple_expression: • "(" tuple_value_list ")"
 
     IDENTIFIER      shift, and go to state 7
     STRING_LITERAL  shift, and go to state 8
@@ -270,54 +270,54 @@ State 13
 
 State 14
 
-   10 command_arg_list: command_arg .
+   10 command_arg_list: command_arg •
 
     $default  reduce using rule 10 (command_arg_list)
 
 
 State 15
 
-   12 command_arg: expression .
+   12 command_arg: expression •
 
     $default  reduce using rule 12 (command_arg)
 
 
 State 16
 
-   14 expression: tuple_expression .
+   14 expression: tuple_expression •
 
     $default  reduce using rule 14 (expression)
 
 
 State 17
 
-    0 $accept: program END .
+    0 $accept: program END •
 
     $default  accept
 
 
 State 18
 
-    2 statement_list: statement_list statement .
+    2 statement_list: statement_list statement •
 
     $default  reduce using rule 2 (statement_list)
 
 
 State 19
 
-    4 statement: statement_body STATEMENT_END .
+    4 statement: statement_body STATEMENT_END •
 
     $default  reduce using rule 4 (statement)
 
 
 State 20
 
-   11 command_arg: IDENTIFIER "=" . expression
-   14 expression: . tuple_expression
-   15           | . NUMBER_LITERAL
-   16           | . BOOL_LITERAL
-   17           | . STRING_LITERAL
-   18 tuple_expression: . "(" tuple_value_list ")"
+   11 command_arg: IDENTIFIER "=" • expression
+   14 expression: • tuple_expression
+   15           | • NUMBER_LITERAL
+   16           | • BOOL_LITERAL
+   17           | • STRING_LITERAL
+   18 tuple_expression: • "(" tuple_value_list ")"
 
     STRING_LITERAL  shift, and go to state 8
     BOOL_LITERAL    shift, and go to state 9
@@ -330,8 +330,8 @@ State 20
 
 State 21
 
-   19 tuple_value_list: expression . "," tuple_value_list
-   20                 | expression .  [")"]
+   19 tuple_value_list: expression • "," tuple_value_list
+   20                 | expression •  [")"]
 
     ","  shift, and go to state 25
 
@@ -340,35 +340,35 @@ State 21
 
 State 22
 
-   18 tuple_expression: "(" tuple_value_list . ")"
+   18 tuple_expression: "(" tuple_value_list • ")"
 
     ")"  shift, and go to state 26
 
 
 State 23
 
-    9 command_arg_list: command_arg_list command_arg .
+    9 command_arg_list: command_arg_list command_arg •
 
     $default  reduce using rule 9 (command_arg_list)
 
 
 State 24
 
-   11 command_arg: IDENTIFIER "=" expression .
+   11 command_arg: IDENTIFIER "=" expression •
 
     $default  reduce using rule 11 (command_arg)
 
 
 State 25
 
-   14 expression: . tuple_expression
-   15           | . NUMBER_LITERAL
-   16           | . BOOL_LITERAL
-   17           | . STRING_LITERAL
-   18 tuple_expression: . "(" tuple_value_list ")"
-   19 tuple_value_list: . expression "," tuple_value_list
-   19                 | expression "," . tuple_value_list
-   20                 | . expression
+   14 expression: • tuple_expression
+   15           | • NUMBER_LITERAL
+   16           | • BOOL_LITERAL
+   17           | • STRING_LITERAL
+   18 tuple_expression: • "(" tuple_value_list ")"
+   19 tuple_value_list: • expression "," tuple_value_list
+   19                 | expression "," • tuple_value_list
+   20                 | • expression
 
     STRING_LITERAL  shift, and go to state 8
     BOOL_LITERAL    shift, and go to state 9
@@ -382,13 +382,13 @@ State 25
 
 State 26
 
-   18 tuple_expression: "(" tuple_value_list ")" .
+   18 tuple_expression: "(" tuple_value_list ")" •
 
     $default  reduce using rule 18 (tuple_expression)
 
 
 State 27
 
-   19 tuple_value_list: expression "," tuple_value_list .
+   19 tuple_value_list: expression "," tuple_value_list •
 
     $default  reduce using rule 19 (tuple_value_list)
