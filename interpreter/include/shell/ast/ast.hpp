@@ -1,3 +1,9 @@
+/**
+ * ast.hpp
+ * 
+ * This file contains the interface for the AST related functionality of the project. 
+ */
+
 #pragma once
 
 #include <optional>
@@ -45,6 +51,8 @@ public:
     std::optional<Value> evaluate() const; 
 
     void print(std::ostream& stream, int indent = 0) const;
+
+    bool semanticCheck(std::ostream& errStream) const;
 
     // Static factory methods
     static AstNode makeNone(Location location);

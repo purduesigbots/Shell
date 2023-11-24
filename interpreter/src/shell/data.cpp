@@ -42,6 +42,14 @@ TypeInfo TypeInfo::makeBoolean()
     return newTypeInfo;
 }
 
+TypeInfo TypeInfo::makeEmptyTuple()
+{
+    TypeInfo newTypeInfo;
+    
+    newTypeInfo.primaryType = TUPLE;
+
+    return newTypeInfo;
+}
 
 
 } // namespace shell

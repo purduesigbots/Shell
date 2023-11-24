@@ -13,9 +13,15 @@
 
 namespace shell {
 
+    /**
+     * @brief Parser for the shell language. Reads input from a stream and returns a parsed abstract syntax tree.
+     */
     class Parser : public yyBisonParser
     {
     public:
+        /**
+         * @brief Constructs a new parser using the passed lexer
+         */
         Parser(shell::Lexer& _lexer)
         : yyBisonParser(_lexer, *this)
         {
@@ -23,15 +29,21 @@ namespace shell {
         }
 
         /**
-         * @brief Parses the next statement in the input stream.
+         * @brief Parses the next statement in the input stream and then returns the result as an AstNode.
+         * 
+         * @remark This function is intended for implementing an interactive shell where input is executed one statement at a time.
+         * 
+         * @return An std::optional containing an AstNode if the parse was successful, or std::nullopt otherwise. 
          */
-        // TODO: Implement
         std::optional<AstNode> parseNextStatement();
 
         /**
-         * @brief Parses the input stream until the end of the file
+         * @brief Parses the input stream until the end of the file. 
+         * 
+         * @remark This function is intended for implementing the execution of an entire script file or for files piped through the command line.
+         * 
+         * @return An std::optional containing an AstNode if the parse was successful, or std::nullopt otherwise. 
          */
-        // TODO: Implement
         std::optional<AstNode> parseFile();
         
         friend class yyBisonParser;

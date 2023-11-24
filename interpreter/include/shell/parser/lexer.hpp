@@ -16,8 +16,6 @@
 
 namespace shell {
 
-    class Shell;
-
     /// @brief The scanner class for the shell.
     /// @details This class is responsible for scanning and analyzing the input to brreak it into tokens and extract
     ///          other relevant information. The implementation for this class is generated 

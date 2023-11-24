@@ -121,7 +121,7 @@ LETTER      [a-zA-Z]
     return shell::Parser::make_IDENTIFIER(yytext, _currentLocation);
 }
 
-
+    /* misc. tokens */
 \= { return shell::Parser::make_EQUALS(_currentLocation); }
 \( { return shell::Parser::make_LEFT_PAREN(_currentLocation); }
 \) { return shell::Parser::make_RIGHT_PAREN(_currentLocation); }
