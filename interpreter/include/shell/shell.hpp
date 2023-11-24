@@ -8,7 +8,7 @@
 
 #include "shell/parser/parser.hpp"
 #include "shell/parser/lexer.hpp"
-#include "shell/parser/location.y.hpp"
+#include "shell/parser/location.hpp"
 #include "shell/data.hpp"
 #include "shell/command.hpp"
 

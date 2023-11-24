@@ -17,7 +17,7 @@ fi
 SOURCES="parser.cpp lexer.l.cpp parser.y.cpp "
 SOURCES+=$(find ../src/shell -name "*.cpp")
 
-mv ./location.y.hpp ../include/shell/parser/location.y.hpp
+mv ./location.hpp ../include/shell/parser/location.hpp
 
 g++ -g -std=c++17 -o parser $SOURCES -I../include/ -I../tools/parser/ -I../include/shell/parser/ -Wl,--demangle 
 if [[ "$?" != 0 ]]; then 

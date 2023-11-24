@@ -5,6 +5,8 @@
 
 #include "shell/data.hpp"
 
+#include "shell/parser/location.hpp"
+
 namespace shell {
 
 class AstNode
@@ -22,7 +24,15 @@ public:
         COMMAND_CALL,           // 
         COMMAND_NAMED_ARG,
         COMMAND_UNNAMED_ARG,
+
+        TUPLE_EXPRESSION,
     };
+
+    AstNode() 
+    : _type(NONE)
+    {}
+    
+    ~AstNode() {}
 
     bool isLiteral() const;
 
@@ -36,8 +46,34 @@ public:
 
     void print(std::ostream& stream, int indent = 0) const;
 
+    // Static factory methods
+    static AstNode makeNone(Location location);
+
+    static AstNode makeNumberLiteral(Number value, Location location);
+    static AstNode makeBooleanLiteral(bool value, Location location);
+    static AstNode makeStringLiteral(std::string value, Location location);
+
+    static AstNode makeNamedCommandArg(std::string name, AstNode value, Location location);
+    static AstNode makeUnnamedCommandArg(AstNode value, Location location);
+
+    static AstNode makeCommand(std::string name, std::vector<AstNode> args, Location location);
+
+    static AstNode makeTupleExpression(std::vector<AstNode> elements, Location location);
+
 private:
+    AstNode(int type, Location location)
+    : _type{type}, _location{location}
+    {}
+
+
+    union {
+        Number*             _numberValue;
+        std::string*        _stringValue;
+        bool                _booleanValue;
+    };
+
     int                     _type;
+    Location                _location;
     std::vector<AstNode>    _children;
 };
 

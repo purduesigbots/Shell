@@ -27,6 +27,8 @@
 %define api.namespace { shell }
 %define api.parser.class { yyBisonParser }
 
+%define api.location.type { shell::Location }
+
 // We want location data for better error reporting
 %locations 
 
@@ -48,9 +50,10 @@
     #include <iostream>
     #include <string>
     
-    #include "shell/parser/location.y.hpp"
+    #include "shell/parser/location.hpp"
 
     #include "shell/data.hpp"
+    #include "shell/ast/ast.hpp"
 
     // Forward declare the dependent classes for the parser here. If we include the header files, we'll get a circular
     // dependency.
@@ -59,6 +62,7 @@
         class Lexer;
         class Parser; 
         class Shell;
+        class Location;
     }
 }
 
@@ -124,6 +128,18 @@
     ;
 
 // TODO: Types for non-terminals:
+%type <shell::AstNode>   program
+                        statement_list
+                        statement
+                        statement_body
+                        command_call
+                        command_arg
+                        expression
+                        tuple_expression
+
+%type < std::vector<shell::AstNode> >   command_args
+                                        command_arg_list
+                                        tuple_value_list
 
 //======================================================================================================================
 // MISC DEFINITIONS
@@ -142,7 +158,11 @@
 %%
 
 program
-    : statement_list
+    : statement_list {
+        parser.result = std::nullopt;
+
+        YYACCEPT;
+    }
     ;
 
 statement_list
@@ -156,46 +176,56 @@ statement_list
 // 
 
 statement
-    : statement_body STATEMENT_END
+    : statement_body STATEMENT_END {
+        if(parser.stopAfterStatement) {
+            parser.result = $1;
+
+            YYACCEPT;
+        }
+    }
     ;
 
 statement_body
-    : command_call
+    : command_call {
+        $$ = $1;
+    }
     ;
 
 command_call
     : IDENTIFIER command_args { 
-        std::cout << "Calling Command \"" << $1 << "\"" << std::endl;
+        $$ = AstNode::makeCommand($1, $2, Location::join(@1, @2));
     }
     ;
 
 command_args
     : command_arg_list {
-        std::cout << "with arguments" << std::endl;
+        $$ = $1;
     }
     | {
-        std::cout << "with no arguments" << std::endl;
+        $$ = std::vector<AstNode>();
     }
     ;
 
 command_arg_list
     : command_arg_list command_arg {
-
+        $$ = $1;
+        $$.push_back($2);
     }
     | command_arg {
-
+        $$ = std::vector<shell::AstNode>();
+        $$.push_back($1);
     }
     ;
 
 command_arg
     : IDENTIFIER "=" expression {
-        std::cout << "With named argument \"" << $1 << "\"" << std::endl;
+        $$ = AstNode::makeNamedCommandArg($1, $3, Location::join(@1, @3));
     }
     | expression {
-        std::cout << "With unnamed argument" << std::endl;
+        $$ = AstNode::makeUnnamedCommandArg($1, @1);
     }
     | IDENTIFIER {
-        std::cout << "With flag \"" << $1 << "\" set" << std::endl;
+        $$ = AstNode::makeNamedCommandArg($1, AstNode::makeBooleanLiteral(true, @1), @1);
     }
     ;
 
@@ -205,34 +235,43 @@ command_arg
 
 expression
     : tuple_expression {
+        $$ = $1;
     }
     | NUMBER_LITERAL {
+        $$ = AstNode::makeNumberLiteral($1, @1);
     }
     | BOOL_LITERAL {
+        $$ = AstNode::makeBooleanLiteral($1, @1);
     }
     | STRING_LITERAL {
+        $$ = AstNode::makeStringLiteral($1, @1);
     }
     ;
 
 tuple_expression
     : "(" tuple_value_list ")" {
+        $$ = AstNode::makeTupleExpression($2, Location::join(@1, @3));
     }
     ;
 
 tuple_value_list
     : expression "," tuple_value_list {
+        $$ = $3;
+        $$.push_back($1);
     }
     | expression {
+        $$ = std::vector<AstNode>();
+        $$.push_back($1);
     }
     ;
 
 %%
 
 // Error reporting function. This is called by Bison when it encounters a syntax error.
-void shell::yyBisonParser::error(const location &loc , const std::string &message)
+void shell::yyBisonParser::error(const shell::Location &loc , const std::string &message)
 {
-    position begin = loc.begin;
-    position end  = loc.end;
+    Position begin = loc.begin;
+    Position end  = loc.end;
 
     std::cerr << "Error at " << begin.filename << ":" << begin.line << ":" << begin.column << std::endl;
     std::cerr << "    " << message << std::endl;

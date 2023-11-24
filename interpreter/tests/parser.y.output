@@ -53,37 +53,37 @@ Nonterminals, with rules where they appear
 
     $accept (12)
         on left: 0
-    program (13)
+    program <shell::AstNode> (13)
         on left: 1
         on right: 0
-    statement_list (14)
+    statement_list <shell::AstNode> (14)
         on left: 2 3
         on right: 1 2
-    statement (15)
+    statement <shell::AstNode> (15)
         on left: 4
         on right: 2 3
-    statement_body (16)
+    statement_body <shell::AstNode> (16)
         on left: 5
         on right: 4
-    command_call (17)
+    command_call <shell::AstNode> (17)
         on left: 6
         on right: 5
-    command_args (18)
+    command_args < std::vector<shell::AstNode> > (18)
         on left: 7 8
         on right: 6
-    command_arg_list (19)
+    command_arg_list < std::vector<shell::AstNode> > (19)
         on left: 9 10
         on right: 7 9
-    command_arg (20)
+    command_arg <shell::AstNode> (20)
         on left: 11 12 13
         on right: 9 10
-    expression (21)
+    expression <shell::AstNode> (21)
         on left: 14 15 16 17
         on right: 11 12 19 20
-    tuple_expression (22)
+    tuple_expression <shell::AstNode> (22)
         on left: 18
         on right: 14
-    tuple_value_list (23)
+    tuple_value_list < std::vector<shell::AstNode> > (23)
         on left: 19 20
         on right: 18 19
 

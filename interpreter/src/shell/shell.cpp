@@ -18,11 +18,17 @@ Shell::~Shell()
 
 void Shell::runInteractive(std::istream& input, std::ostream& output, std::ostream& error)
 {
-    while(auto astOptional = _parser.parseNextStatement()) {
+    auto astOptional = _parser.parseNextStatement();
+
+    while(astOptional.has_value()) {
         AstNode astTree = astOptional.value();
 
         astTree.print(output);
+        
+        astOptional = _parser.parseNextStatement();
     }
+
+    std::cerr << "EOF" << std::endl;
 }
 
 void Shell::setPrompt(std::string prompt)

@@ -37,7 +37,8 @@ namespace shell {
         friend class yyBisonParser;
 
     protected:
-        bool    stopAfterStatement = false;
+        bool                    stopAfterStatement = false;
+        std::optional<AstNode>  result = std::nullopt;
     };
 
 } // namespace shell

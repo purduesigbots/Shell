@@ -53,7 +53,7 @@ else
 endif
 
 FLEX_FLAGS := 
-BISON_FLAGS := -Dapi.location.file='"$(shell pwd)/include/shell/parser/location.y.hpp"'
+BISON_FLAGS :=
 
 # Define the directories where the parser files are located to shorten the rules later in the makefile
 PARSER_SRC_DIR=$(SRCDIR)/shell/parser

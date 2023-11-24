@@ -99,24 +99,28 @@ LETTER      [a-zA-Z]
     // remove the leading and trailing quotes from the string
     value = value.substr(1, value.length() - 2);
 
-    std::cout << "Token: STRING_LITERAL \"" << value << "\"" << std::endl;
-
     return shell::Parser::make_STRING_LITERAL(value, _currentLocation);
 }
 
     /* A statment ends either with a new line or semicolon */
 \n|; { 
-    std::cout << "Token: STATEMENT_END" << std::endl;
     return shell::Parser::make_STATEMENT_END(_currentLocation);
+}
+
+"true" {
+    return shell::Parser::make_BOOL_LITERAL(true, _currentLocation);
+}
+
+"false" {
+    return shell::Parser::make_BOOL_LITERAL(false, _currentLocation);
 }
 
     /* An identifier token. These are typically used for identifying variables, functions, flags, etc.
      */
 {ID_START}{ID_CHAR}* {
-    std::cout << "Token: IDENTIFIER \"" << yytext << "\"" << std::endl;
-    
     return shell::Parser::make_IDENTIFIER(yytext, _currentLocation);
 }
+
 
 \= { return shell::Parser::make_EQUALS(_currentLocation); }
 \( { return shell::Parser::make_LEFT_PAREN(_currentLocation); }

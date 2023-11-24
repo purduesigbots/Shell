@@ -38,7 +38,7 @@ namespace shell {
         void updateLocation(int length, const char* text);
 
     private:
-        shell::location _currentLocation;
+        Location _currentLocation;
     };
 } // namespace shell
 
