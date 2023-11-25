@@ -1,3 +1,9 @@
+/**
+ * @file data.hpp
+ * 
+ * @brief Utilities surrounding data in the shell.
+ */
+
 #pragma once
 
 #include <string>

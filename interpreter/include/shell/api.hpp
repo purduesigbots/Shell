@@ -1,7 +1,7 @@
 /** 
- * Public API for the shell library.
+ * @file api.hpp 
  * 
- * This file includes all the public headers for the shell library. 
+ * @brief Public API for the PROS shell.
  */
 
 #pragma once

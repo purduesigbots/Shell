@@ -1,3 +1,9 @@
+/**
+ * @file shell.hpp
+ * 
+ * @brief Shell instance public API.
+ */
+
 #ifndef SHELL_HPP_INCLUDED
 #define SHELL_HPP_INCLUDED
 

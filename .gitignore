@@ -21,3 +21,6 @@ temp.errors
 **/*.l.cpp
 **/*.y.hpp
 **/*.l.hpp
+
+# Doxygen crap
+doxygen-build/

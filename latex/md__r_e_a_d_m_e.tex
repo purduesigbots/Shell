@@ -1,0 +1,43 @@
+\hypertarget{md__r_e_a_d_m_e_autotoc_md1}{}\doxysection{Installing\+:}\label{md__r_e_a_d_m_e_autotoc_md1}
+
+\begin{DoxyEnumerate}
+\item Donwload the \mbox{[}latest release\mbox{]}().
+\item Open a terminal and navigate to where you downloaded the template.
+\item Fetch it with the PROS CLI\+: {\ttfamily pros c fetch shell@$<$version$>$.zip}
+\item Navigate to your project\textquotesingle{}s directory
+\item Apply the template to the project\+: {\ttfamily pros c apply shell}
+\end{DoxyEnumerate}\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysection{Getting Started}\label{md__r_e_a_d_m_e_autotoc_md2}
+To get started, create an instance of the {\ttfamily shell\+::\+Shell} class, and call the {\ttfamily run\+Interactive} method\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include "{}shell/api.hpp"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{void} opcontrol() \{}
+\DoxyCodeLine{    shell::Shell myShell;}
+\DoxyCodeLine{}
+\DoxyCodeLine{    myShell.runInteractive();}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ If you want to use commands for one of the supported templates, you can add their commands like this\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{shell::bindings::installArmsBindings(myShell);}
+
+\end{DoxyCode}
+
+
+Then you can open up a PROS terminal, and type commands into it in real time and watch your robot do things\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{goto (12, 12) maxSpeed=12.0 }
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md3}{}\doxysection{Documentation\+:}\label{md__r_e_a_d_m_e_autotoc_md3}
+The full documentation for PROS Shell can be found \mbox{[}here\mbox{]}().\hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysection{Contributing\+:}\label{md__r_e_a_d_m_e_autotoc_md4}
+If you would like to contribute to the project, see the \mbox{[}contibution guide\mbox{]}().\hypertarget{md__r_e_a_d_m_e_autotoc_md5}{}\doxysection{Special Thanks}\label{md__r_e_a_d_m_e_autotoc_md5}
+
+\begin{DoxyItemize}
+\item My two attempts at Purdue\textquotesingle{}s compilers class for \sout{forcing} helping me to learn how to implement compilers and interpreters
+\item The contributers of \href{https://www.gnu.org/software/bison/}{\texttt{ Bison}} and \href{https://github.com/westes/flex}{\texttt{ Flex}} for making their parsing tools.
+\item Chris Narkiewicz (ezaquarii) for his \href{https://github.com/ezaquarii/bison-flex-cpp-example}{\texttt{ bison and flex C++ example}} 
+\end{DoxyItemize}

@@ -1,3 +1,12 @@
+/**
+ * @file command.hpp 
+ * 
+ * @brief Public API for commands in the shell.
+ * 
+ * @defgroup CppApi_Commands C++ API For Commands
+ */
+
+
 #pragma once
 
 #include <optional>
@@ -9,6 +18,12 @@
 
 namespace shell
 {
+
+/**
+ * @ingroup CppApi_Commands
+ * @addtogroup CppApi_Commands
+ * @{
+ */
 
 struct ArgumentInfo
 {
@@ -27,6 +42,9 @@ struct ArgumentInfo
     bool        boolValue;
 };
 
+/**
+ * @brief Utility class providing an interface to the arguments passed to a command.
+ */
 class CommandArgs
 {
 public:
@@ -93,11 +111,13 @@ protected:
     std::vector<size_t>                     _indexedLookup;
 };
 
-class CommandBuidler
-{
-    
-};
-
+/**
+ * @brief Callback format for commands
+ * @param args  A CommandArgs helper for accessing the arguments passed to the command.
+ * @return Whether or not the command was successful
+ */
 using CommandCallback = bool(*)(const CommandArgs args);
+
+/** @} */
 
 } // namespace shell
