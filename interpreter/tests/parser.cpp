@@ -61,5 +61,9 @@ int main(int argc, char** argv)
 
     shell::Shell shell;
 
+    shell.registerCommand("exit", exitCallback);
+    shell.registerCommand("wait", delayCallback);
+    shell.registerCommand("goto", gotoCallback);
+
     shell.runInteractive();
 }

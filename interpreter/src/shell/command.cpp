@@ -8,12 +8,12 @@ std::string CommandArgs::commandName() const
     return _name;
 }
 
-bool CommandArgs::hasFlag(std::string name) const
+bool CommandArgs::getBoolean(std::string name) const
 {
     auto ittr = _namedLookup.find(name);
 
     return ittr != _namedLookup.end() && 
-        ittr->second->type == ArgumentInfo::FLAG;
+        ittr->second->type == ArgumentInfo::BOOLEAN;
 }
 
 
@@ -85,6 +85,74 @@ size_t CommandArgs::totalNumberOfArguments() const
 {
     return _arguments.size();
 }
+
+void CommandArgs::addNamedString(std::string name, std::string value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::STRING;
+    info.name = name;
+    info.stringValue = value;
+
+    _arguments.push_back(info);
+    _namedLookup[name] = &_arguments.back();
+}
+
+void CommandArgs::addNamedNumber(std::string name, Number value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::NUMBER;
+    info.name = name;
+    info.numberValue = value;
+
+    _arguments.push_back(info);
+    _namedLookup[name] = &_arguments.back();
+}
+
+void CommandArgs::addNamedBoolean(std::string name, bool value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::BOOLEAN;
+    info.name = name;
+    info.boolValue = value;
+
+    _arguments.push_back(info);
+    _namedLookup[name] = &_arguments.back();
+}
+
+void CommandArgs::addUnnamedString(std::string value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::STRING;
+    info.name = "";
+    info.stringValue = value;
+
+    _arguments.push_back(info);
+    _indexedLookup.push_back(_arguments.size() - 1);
+}
+
+void CommandArgs::addUnnamedNumber(Number value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::NUMBER;
+    info.name = "";
+    info.numberValue = value;
+
+    _arguments.push_back(info);
+    _indexedLookup.push_back(_arguments.size() - 1);
+}
+
+void CommandArgs::addUnnamedBoolean(bool value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::NUMBER;
+    info.name = "";
+    info.boolValue = value;
+
+    _arguments.push_back(info);
+    _indexedLookup.push_back(_arguments.size() - 1);
+}
+
+
 
 
 } // namespace shell

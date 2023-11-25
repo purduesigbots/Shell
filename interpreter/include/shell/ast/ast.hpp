@@ -40,6 +40,8 @@ public:
     
     ~AstNode() {}
 
+    int type() const { return _type; }
+
     bool isLiteral() const;
 
     bool isExpression() const;
@@ -51,8 +53,6 @@ public:
     std::optional<Value> evaluate() const; 
 
     void print(std::ostream& stream, int indent = 0) const;
-
-    bool semanticCheck(std::ostream& errStream) const;
 
     // Static factory methods
     static AstNode makeNone(Location location);
@@ -67,12 +67,30 @@ public:
     static AstNode makeCommand(std::string name, std::vector<AstNode> args, Location location);
 
     static AstNode makeTupleExpression(std::vector<AstNode> elements, Location location);
+    
+    const std::string& getStringValue() const {
+        // TODO: Make safer at some point
+        return *_stringValue;
+    }
+
+    bool getBooleanValue() const {
+        // TODO: Make safer at some point
+        return _booleanValue;
+    }
+
+    Number getNumberValue() const {
+        // TODO: Make safer at some point
+        return *_numberValue;
+    }
+
+    const std::vector<AstNode>& children() {
+        return _children;
+    }
 
 private:
     AstNode(int type, Location location)
     : _type{type}, _location{location}
     {}
-
 
     union {
         Number*             _numberValue;

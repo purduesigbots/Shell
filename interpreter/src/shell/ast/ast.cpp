@@ -114,26 +114,6 @@ void AstNode::print(std::ostream& stream, int indent) const
         child.print(stream, indent + 1);
 }
 
-bool AstNode::semanticCheck(std::ostream& errStream) const
-{
-    bool valid = false;
-
-    switch(_type) 
-    {
-    case COMMAND_CALL: {
-        for(const AstNode& child : _children) {
-            if(child._type != COMMAND_NAMED_ARG || child._type != COMMAND_UNNAMED_ARG) {
-                
-            }
-        }
-
-    }
-
-    }
-
-    return valid;
-}
-
 AstNode AstNode::makeNone(Location location)
 {
     AstNode newNode(NONE, location);

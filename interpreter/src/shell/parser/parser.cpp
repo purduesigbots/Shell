@@ -8,12 +8,12 @@ namespace shell {
 
 std::optional<AstNode> Parser::parseNextStatement()
 {
-    std::cout << "\nPARSING STATEMENT. Enter your input: " << std::endl;
+    //std::cout << "\nPARSING STATEMENT. Enter your input: " << std::endl;
 
     stopAfterStatement = true;
 
     if(parse() == 0) {
-        std::cout << "\nPARSE VALID. Resulting tree:\n" << std::endl;
+       // std::cout << "\nPARSE VALID. Resulting tree:\n" << std::endl;
 
         return result;
     }

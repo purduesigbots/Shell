@@ -14,7 +14,7 @@ struct ArgumentInfo
 {
     enum 
     {
-        FLAG,
+        BOOLEAN,
         NUMBER,
         STRING,
     };
@@ -34,10 +34,10 @@ public:
     /// @return     The command's name
     std::string commandName() const;
 
-    /// @brief      Returns whether there's a flag argument with the given name
+    /// @brief      Returns whether there's a boolean argument with the given name
     /// @param name The name of the flag to check for
     /// @return     True if the flag is passed to the command, false otherwise
-    bool hasFlag(std::string name) const;
+    bool getBoolean(std::string name) const;
 
     /// @brief      Returns a named argument as a number, if one exists.
     /// @param name The name of the argument to get
@@ -62,7 +62,7 @@ public:
     /// @return         An optional object containing the number, or std::nullopt if the nth argument doesn't exist
     ///                 or is not a number.
     std::optional<std::string> getString(size_t index) const;
-
+    
     size_t numberOfNamedArguments() const;
     size_t numberOfUnnamedArguments() const;
     size_t totalNumberOfArguments() const;
@@ -71,9 +71,13 @@ protected:
     friend class Shell;
     friend class Parser;
 
-    void addFlag(std::string name);
-    void addString(std::string name, std::string value);
-    void addNumber(std::string name, double value, std::string suffix = "");
+    void addNamedString(std::string name, std::string value);
+    void addNamedNumber(std::string name, Number value);
+    void addNamedBoolean(std::string name, bool value);
+
+    void addUnnamedString(std::string value);
+    void addUnnamedNumber(Number value);
+    void addUnnamedBoolean(bool value);
 
     // The name that was used to call the command. This is here in case the same callback is used for multiple aliases
     // of a given command
