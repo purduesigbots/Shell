@@ -1,4 +1,7 @@
 #include "shell/command.hpp"
+#include "shell/shell.hpp"
+
+#include <optional>
 
 namespace shell
 {
@@ -152,7 +155,79 @@ void CommandArgs::addUnnamedBoolean(bool value)
     _indexedLookup.push_back(_arguments.size() - 1);
 }
 
+std::optional<double> CommandArgs::getNewNumber(
+    std::string name, 
+    std::string units
+)
+{
+    auto ittr = _namedLookup.find(name);
+
+    if(ittr != _namedLookup.end() && 
+       ittr->second->type == ArgumentInfo::NUMBER) {
+        
+        auto convertedOpt = _shell->evaluateNumberToUnit(
+            ittr->second->numberValue,
+            units
+        );
+
+        if(convertedOpt)
+            return convertedOpt.value().value;
+        else
+            return std::nullopt;
+
+    }
+
+    return std::nullopt;
+}
+
+std::optional<double> CommandArgs::getNewNumber(
+    size_t index,
+    std::string units
+)
+{
+    if(index < 0 || index >= _indexedLookup.size())
+        return std::nullopt;
+
+    size_t argIndex = _indexedLookup[index];
+    if(argIndex < 0 || argIndex >= _arguments.size())
+        return std::nullopt;
+
+    if(_arguments[argIndex].type == ArgumentInfo::NUMBER) {
+        auto convertedOpt = _shell->evaluateNumberToUnit(
+            _arguments[argIndex].numberValue,
+            units
+        );
+
+        if(convertedOpt)
+            return convertedOpt.value().value;
+        else
+            return std::nullopt;
+    }
+
+    return std::nullopt;
+}
 
 
+void CommandArgs::addNewNamedNumber(std::string name, Number value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::NUMBER;
+    info.name = name;
+    info.numberValue = value;
+
+    _arguments.push_back(info);
+    _namedLookup[name] = &_arguments.back();
+}
+
+void CommandArgs::addNewUnnamedNumber(Number value)
+{
+    ArgumentInfo info;
+    info.type = ArgumentInfo::NUMBER;
+    info.name = "";
+    info.numberValue = value;
+
+    _arguments.push_back(info);
+    _indexedLookup.push_back(_arguments.size() - 1);
+}
 
 } // namespace shell

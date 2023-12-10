@@ -19,6 +19,8 @@
 namespace shell
 {
 
+class Shell;
+
 /**
  * @ingroup CppApi_Commands
  * @addtogroup CppApi_Commands
@@ -39,6 +41,7 @@ struct ArgumentInfo
 
     std::string stringValue;
     Number      numberValue;
+    double      doubleValue;
     bool        boolValue;
 };
 
@@ -80,7 +83,17 @@ public:
     /// @return         An optional object containing the number, or std::nullopt if the nth argument doesn't exist
     ///                 or is not a number.
     std::optional<std::string> getString(size_t index) const;
-    
+
+    std::optional<double>   getNewNumber(
+        std::string name, 
+        std::string units = ""
+    );
+
+    std::optional<double>   getNewNumber(
+        size_t index,
+        std::string units = ""
+    );
+
     size_t numberOfNamedArguments() const;
     size_t numberOfUnnamedArguments() const;
     size_t totalNumberOfArguments() const;
@@ -96,6 +109,11 @@ protected:
     void addUnnamedString(std::string value);
     void addUnnamedNumber(Number value);
     void addUnnamedBoolean(bool value);
+
+    void addNewNamedNumber(std::string name, Number value);
+    void addNewUnnamedNumber(Number value);
+
+    Shell*                           _shell;
 
     // The name that was used to call the command. This is here in case the same callback is used for multiple aliases
     // of a given command
